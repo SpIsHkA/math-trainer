@@ -1,0 +1,519 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Тренажёр умножения и деления</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            margin: 0;
+            padding: 20px;
+            background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: #333;
+        }
+        
+        .container {
+            width: 100%;
+            max-width: 800px;
+            background-color: white;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            padding: 30px;
+            text-align: center;
+        }
+        
+        h1 {
+            color: #2c3e50;
+            margin-top: 0;
+            font-size: 2.5rem;
+        }
+        
+        h2 {
+            color: #3498db;
+            margin-bottom: 25px;
+        }
+        
+        .screen {
+            display: none;
+        }
+        
+        .screen.active {
+            display: block;
+            animation: fadeIn 0.5s;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        .btn {
+            background-color: #3498db;
+            color: white;
+            border: none;
+            border-radius: 50px;
+            padding: 15px 30px;
+            font-size: 1.2rem;
+            cursor: pointer;
+            margin: 10px;
+            transition: all 0.3s;
+            min-width: 200px;
+            font-weight: bold;
+        }
+        
+        .btn:hover {
+            background-color: #2980b9;
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        .btn-big {
+            padding: 20px 40px;
+            font-size: 1.5rem;
+            margin: 20px 10px;
+        }
+        
+        .btn-green {
+            background-color: #2ecc71;
+        }
+        
+        .btn-green:hover {
+            background-color: #27ae60;
+        }
+        
+        .btn-red {
+            background-color: #e74c3c;
+        }
+        
+        .btn-red:hover {
+            background-color: #c0392b;
+        }
+        
+        .btn-orange {
+            background-color: #f39c12;
+        }
+        
+        .btn-orange:hover {
+            background-color: #d35400;
+        }
+        
+        .number-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 15px;
+            margin: 30px auto;
+            max-width: 500px;
+        }
+        
+        .number-btn {
+            background-color: #ecf0f1;
+            border: none;
+            border-radius: 10px;
+            padding: 15px;
+            font-size: 1.5rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: bold;
+        }
+        
+        .number-btn.selected {
+            background-color: #2ecc71;
+            color: white;
+            transform: scale(1.05);
+            box-shadow: 0 5px 15px rgba(46, 204, 113, 0.4);
+        }
+        
+        .number-input {
+            font-size: 1.2rem;
+            padding: 12px 20px;
+            border: 2px solid #3498db;
+            border-radius: 50px;
+            width: 150px;
+            text-align: center;
+            margin: 20px 0;
+        }
+        
+        .question {
+            font-size: 4rem;
+            margin: 30px 0;
+            font-weight: bold;
+            color: #2c3e50;
+        }
+        
+        .answer-input {
+            font-size: 2rem;
+            padding: 15px 30px;
+            border: 3px solid #3498db;
+            border-radius: 50px;
+            width: 200px;
+            text-align: center;
+            margin: 20px 0;
+        }
+        
+        .progress {
+            font-size: 1.2rem;
+            margin-bottom: 20px;
+            color: #7f8c8d;
+        }
+        
+        .result-stats {
+            font-size: 2rem;
+            margin: 30px 0;
+            line-height: 1.6;
+        }
+        
+        .correct {
+            color: #2ecc71;
+            font-weight: bold;
+        }
+        
+        .incorrect {
+            color: #e74c3c;
+            font-weight: bold;
+        }
+        
+        .feedback {
+            font-size: 1.8rem;
+            min-height: 60px;
+            margin: 20px 0;
+        }
+        
+        .btn-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin-top: 30px;
+        }
+        
+        @media (max-width: 600px) {
+            .container {
+                padding: 15px;
+            }
+            
+            h1 {
+                font-size: 1.8rem;
+            }
+            
+            .btn {
+                padding: 12px 20px;
+                font-size: 1rem;
+                min-width: 160px;
+            }
+            
+            .btn-big {
+                padding: 15px 25px;
+                font-size: 1.2rem;
+            }
+            
+            .question {
+                font-size: 3rem;
+            }
+            
+            .number-grid {
+                grid-template-columns: repeat(3, 1fr);
+                max-width: 300px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Главный экран -->
+        <div id="main-screen" class="screen active">
+            <h1>Тренажёр умножения и деления</h1>
+            <h2>Выберите режим</h2>
+            <div>
+                <button id="multiplication-btn" class="btn btn-big btn-green">Умножение</button>
+                <button id="division-btn" class="btn btn-big btn-orange">Деление</button>
+            </div>
+        </div>
+        
+        <!-- Экран настройки -->
+        <div id="setup-screen" class="screen">
+            <h1 id="setup-title">Настройка умножения</h1>
+            <p>Выберите числа для тренировки:</p>
+            
+            <div class="number-grid">
+                <button class="number-btn" data-number="1">1</button>
+                <button class="number-btn" data-number="2">2</button>
+                <button class="number-btn" data-number="3">3</button>
+                <button class="number-btn" data-number="4">4</button>
+                <button class="number-btn" data-number="5">5</button>
+                <button class="number-btn" data-number="6">6</button>
+                <button class="number-btn" data-number="7">7</button>
+                <button class="number-btn" data-number="8">8</button>
+                <button class="number-btn" data-number="9">9</button>
+            </div>
+            
+            <p>Количество примеров:</p>
+            <input type="number" id="question-count" class="number-input" min="1" max="50" value="10">
+            
+            <div>
+                <button id="start-btn" class="btn btn-green btn-big">Начать</button>
+                <button id="back-to-main" class="btn">Назад</button>
+            </div>
+        </div>
+        
+        <!-- Экран тестирования -->
+        <div id="quiz-screen" class="screen">
+            <div class="progress" id="progress">Вопрос 1 из 10</div>
+            <div class="question" id="question">5 × 3 = ?</div>
+            <div class="feedback" id="feedback"></div>
+            <input type="number" id="answer-input" class="answer-input" autofocus>
+            <div>
+                <button id="check-btn" class="btn btn-green">Проверить</button>
+                <button id="quit-btn" class="btn btn-red">Выйти</button>
+            </div>
+        </div>
+        
+        <!-- Экран результатов -->
+        <div id="results-screen" class="screen">
+            <h1>Результаты</h1>
+            <div class="result-stats">
+                <div>Правильно: <span id="correct-count" class="correct">0</span></div>
+                <div>Ошибки: <span id="incorrect-count" class="incorrect">0</span></div>
+            </div>
+            
+            <div class="btn-container">
+                <button id="menu-btn" class="btn btn-green">В меню</button>
+                <button id="retry-btn" class="btn btn-orange">Прорешать ошибки</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Состояние приложения
+        const state = {
+            operation: null, // 'multiplication' или 'division'
+            selectedNumbers: [1, 2, 3, 4, 5, 6, 7, 8, 9],
+            questionCount: 10,
+            questions: [],
+            currentQuestionIndex: 0,
+            correctAnswers: 0,
+            incorrectAnswers: 0
+        };
+
+        // Элементы интерфейса
+        const screens = {
+            main: document.getElementById('main-screen'),
+            setup: document.getElementById('setup-screen'),
+            quiz: document.getElementById('quiz-screen'),
+            results: document.getElementById('results-screen')
+        };
+
+        const setupTitle = document.getElementById('setup-title');
+        const numberButtons = document.querySelectorAll('.number-btn');
+        const questionCountInput = document.getElementById('question-count');
+        const progressElement = document.getElementById('progress');
+        const questionElement = document.getElementById('question');
+        const answerInput = document.getElementById('answer-input');
+        const feedbackElement = document.getElementById('feedback');
+        const correctCountElement = document.getElementById('correct-count');
+        const incorrectCountElement = document.getElementById('incorrect-count');
+
+        // Переключение экранов
+        function showScreen(screenName) {
+            Object.values(screens).forEach(screen => {
+                screen.classList.remove('active');
+            });
+            screens[screenName].classList.add('active');
+            
+            // Особые действия при показе экрана
+            if (screenName === 'quiz') {
+                answerInput.focus();
+            }
+        }
+
+        // Инициализация кнопок выбора чисел
+        numberButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                const number = parseInt(button.dataset.number);
+                button.classList.toggle('selected');
+                
+                if (button.classList.contains('selected')) {
+                    if (!state.selectedNumbers.includes(number)) {
+                        state.selectedNumbers.push(number);
+                    }
+                } else {
+                    state.selectedNumbers = state.selectedNumbers.filter(n => n !== number);
+                }
+            });
+        });
+
+        // Установка всех чисел как выбранных
+        function selectAllNumbers() {
+            numberButtons.forEach(button => {
+                button.classList.add('selected');
+            });
+            state.selectedNumbers = [1, 2, 3, 4, 5, 6, 7, 8, 9];
+        }
+
+        // Генерация вопросов
+        function generateQuestions() {
+            state.questions = [];
+            state.currentQuestionIndex = 0;
+            state.correctAnswers = 0;
+            state.incorrectAnswers = 0;
+            
+            for (let i = 0; i < state.questionCount; i++) {
+                const a = state.selectedNumbers[Math.floor(Math.random() * state.selectedNumbers.length)];
+                const b = Math.floor(Math.random() * 9) + 1; // от 1 до 9
+                
+                if (state.operation === 'multiplication') {
+                    state.questions.push({
+                        type: 'multiplication',
+                        text: `${a} × ${b} = ?`,
+                        answer: a * b
+                    });
+                } else { // division
+                    // Гарантируем целочисленное деление
+                    const product = a * b;
+                    state.questions.push({
+                        type: 'division',
+                        text: `${product} ÷ ${a} = ?`,
+                        answer: b
+                    });
+                }
+            }
+        }
+
+        // Показ текущего вопроса
+        function showCurrentQuestion() {
+            const currentQuestion = state.questions[state.currentQuestionIndex];
+            questionElement.textContent = currentQuestion.text;
+            progressElement.textContent = `Вопрос ${state.currentQuestionIndex + 1} из ${state.questions.length}`;
+            answerInput.value = '';
+            feedbackElement.textContent = '';
+            answerInput.focus();
+        }
+
+        // Проверка ответа
+        function checkAnswer() {
+            const userAnswer = parseInt(answerInput.value);
+            if (isNaN(userAnswer)) {
+                feedbackElement.textContent = 'Введите число!';
+                feedbackElement.style.color = '#e74c3c';
+                return;
+            }
+
+            const currentQuestion = state.questions[state.currentQuestionIndex];
+            currentQuestion.userAnswer = userAnswer;
+            
+            if (userAnswer === currentQuestion.answer) {
+                feedbackElement.textContent = 'Правильно! ✓';
+                feedbackElement.style.color = '#2ecc71';
+                state.correctAnswers++;
+            } else {
+                feedbackElement.textContent = `Ошибка! Правильно: ${currentQuestion.answer}`;
+                feedbackElement.style.color = '#e74c3c';
+                state.incorrectAnswers++;
+            }
+
+            // Переход к следующему вопросу или результатам
+            setTimeout(() => {
+                state.currentQuestionIndex++;
+                
+                if (state.currentQuestionIndex < state.questions.length) {
+                    showCurrentQuestion();
+                } else {
+                    showResults();
+                }
+            }, 1500);
+        }
+
+        // Показ результатов
+        function showResults() {
+            correctCountElement.textContent = state.correctAnswers;
+            incorrectCountElement.textContent = state.incorrectAnswers;
+            showScreen('results');
+        }
+
+        // Повтор ошибок
+        function retryIncorrect() {
+            if (state.incorrectAnswers === 0) {
+                alert('У вас не было ошибок!');
+                return;
+            }
+            
+            // Фильтруем только неправильные ответы
+            state.questions = state.questions.filter(q => q.userAnswer !== q.answer);
+            state.questionCount = state.questions.length;
+            state.currentQuestionIndex = 0;
+            state.correctAnswers = 0;
+            state.incorrectAnswers = 0;
+            
+            showScreen('quiz');
+            showCurrentQuestion();
+        }
+
+        // Обработчики событий
+        document.getElementById('multiplication-btn').addEventListener('click', () => {
+            state.operation = 'multiplication';
+            setupTitle.textContent = 'Настройка умножения';
+            showScreen('setup');
+            selectAllNumbers();
+        });
+
+        document.getElementById('division-btn').addEventListener('click', () => {
+            state.operation = 'division';
+            setupTitle.textContent = 'Настройка деления';
+            showScreen('setup');
+            selectAllNumbers();
+        });
+
+        document.getElementById('start-btn').addEventListener('click', () => {
+            if (state.selectedNumbers.length === 0) {
+                alert('Выберите хотя бы одно число!');
+                return;
+            }
+            
+            const count = parseInt(questionCountInput.value);
+            if (isNaN(count) || count < 1 || count > 50) {
+                alert('Введите число от 1 до 50');
+                return;
+            }
+            
+            state.questionCount = count;
+            generateQuestions();
+            showScreen('quiz');
+            showCurrentQuestion();
+        });
+
+        document.getElementById('back-to-main').addEventListener('click', () => {
+            showScreen('main');
+        });
+
+        document.getElementById('check-btn').addEventListener('click', checkAnswer);
+
+        answerInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                checkAnswer();
+            }
+        });
+
+        document.getElementById('quit-btn').addEventListener('click', () => {
+            if (confirm('Вы уверены, что хотите выйти? Прогресс будет потерян.')) {
+                showScreen('main');
+            }
+        });
+
+        document.getElementById('menu-btn').addEventListener('click', () => {
+            showScreen('main');
+        });
+
+        document.getElementById('retry-btn').addEventListener('click', retryIncorrect);
+
+        // Инициализация
+        selectAllNumbers();
+    </script>
+</body>
+</html>
