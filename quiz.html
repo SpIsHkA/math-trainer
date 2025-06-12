@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Тест - Тренажёр умножения и деления</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <div id="quiz-screen" class="screen active">
+            <div class="progress" id="progress">Вопрос 1 из 10</div>
+            <div class="question" id="question">5 × 3 = ?</div>
+            <div class="feedback" id="feedback"></div>
+            <input type="number" id="answer-input" class="answer-input" autofocus>
+            <div>
+                <button id="check-btn" class="btn btn-green">Проверить</button>
+                <button id="quit-btn" class="btn btn-red">Выйти</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="common.js"></script>
+    <script src="quiz.js"></script>
+</body>
+</html>

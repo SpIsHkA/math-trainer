@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Статистика - Тренажёр умножения и деления</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <div id="stats-screen" class="screen active">
+            <h1>Моя статистика</h1>
+
+            <div class="stat-card">
+                <h3>Общая статистика</h3>
+                <p>Всего решено: <span id="total-questions">0</span></p>
+                <p>Правильно: <span id="total-correct">0</span></p>
+                <p>Точность: <span id="accuracy">0%</span></p>
+            </div>
+
+            <div class="stat-card">
+                <h3>Последние результаты</h3>
+                <div id="last-attempts"></div>
+            </div>
+
+            <button id="stats-back-btn" class="btn">Назад</button>
+        </div>
+    </div>
+
+    <script src="common.js"></script>
+    <script src="stats.js"></script>
+</body>
+</html>

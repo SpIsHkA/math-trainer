@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Авторизация - Тренажёр умножения и деления</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <div id="auth-screen" class="screen active">
+            <h1>Вход в аккаунт</h1>
+            
+            <div class="auth-form">
+                <input type="email" id="auth-email" class="auth-input" placeholder="Email">
+                <input type="password" id="auth-password" class="auth-input" placeholder="Пароль">
+                <button id="login-btn" class="btn btn-green">Войти</button>
+                <button id="register-btn" class="btn">Регистрация</button>
+                <button id="auth-back-btn" class="btn">Назад</button>
+            </div>
+            
+            <div id="auth-status" class="auth-status"></div>
+        </div>
+    </div>
+
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+    
+    <script src="common.js"></script>
+    <script src="auth.js"></script>
+</body>
+</html>

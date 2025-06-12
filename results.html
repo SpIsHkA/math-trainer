@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Результаты - Тренажёр умножения и деления</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <div id="results-screen" class="screen active">
+            <h1>Результаты</h1>
+            <div class="result-stats">
+                <div>Правильно: <span id="correct-count" class="correct">0</span></div>
+                <div>Ошибки: <span id="incorrect-count" class="incorrect">0</span></div>
+            </div>
+
+            <div class="btn-container">
+                <button id="menu-btn" class="btn btn-green">В меню</button>
+                <button id="retry-btn" class="btn btn-orange">Прорешать ошибки</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="common.js"></script>
+    <script src="results.js"></script>
+</body>
+</html>

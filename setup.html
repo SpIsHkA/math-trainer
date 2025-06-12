@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Настройка - Тренажёр умножения и деления</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <div id="setup-screen" class="screen active">
+            <h1 id="setup-title">Настройка умножения</h1>
+            <p>Выберите числа для тренировки:</p>
+
+            <div class="number-grid">
+                <button class="number-btn" data-number="1">1</button>
+                <button class="number-btn" data-number="2">2</button>
+                <button class="number-btn" data-number="3">3</button>
+                <button class="number-btn" data-number="4">4</button>
+                <button class="number-btn" data-number="5">5</button>
+                <button class="number-btn" data-number="6">6</button>
+                <button class="number-btn" data-number="7">7</button>
+                <button class="number-btn" data-number="8">8</button>
+                <button class="number-btn" data-number="9">9</button>
+            </div>
+
+            <p>Количество примеров:</p>
+            <input type="number" id="question-count" class="number-input" min="1" max="50" value="10">
+
+            <div>
+                <button id="start-btn" class="btn btn-green btn-big">Начать</button>
+                <button id="back-to-main" class="btn">Назад</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="common.js"></script>
+    <script src="setup.js"></script>
+</body>
+</html>
