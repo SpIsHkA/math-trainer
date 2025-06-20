@@ -334,3 +334,364 @@ h3 {
         padding: 0 15px;
     }
 }
+
+/* Добавим в конец файла */
+
+.auth-form {
+    display: flex;
+    flex-direction: column;
+    max-width: 400px;
+    margin: 0 auto;
+    gap: 15px;
+}
+
+.auth-input {
+    padding: 15px;
+    border: 2px solid #3498db;
+    border-radius: 50px;
+    font-size: 1.1rem;
+    text-align: center;
+}
+
+select.auth-input {
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+    background-repeat: no-repeat;
+    background-position: right 15px center;
+    background-size: 1em;
+}
+
+.auth-status {
+    margin-top: 20px;
+    min-height: 30px;
+    font-weight: bold;
+    text-align: center;
+}
+
+#register-form {
+    flex-direction: column;
+}
+
+/* Стили для блока пользователя */
+#user-info .stat-card {
+    text-align: center;
+    padding: 20px;
+}
+
+#user-info .btn {
+    margin: 10px 5px;
+    min-width: 180px;
+}
+
+/* Кнопка выхода */
+.btn-red {
+    background-color: #e74c3c;
+}
+
+.btn-red:hover {
+    background-color: #c0392b;
+}
+
+/* Отступы для кнопок в блоке пользователя */
+#user-info .btn-container {
+    margin-top: 15px;
+}
+
+.update-notification {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(0.9);
+    background: white;
+    padding: 25px;
+    border-radius: 20px;
+    max-width: 90%;
+    width: 500px;
+    box-shadow: 0 10px 50px rgba(0, 0, 0, 0.3);
+    z-index: 1000;
+    text-align: center;
+    opacity: 0;
+    transition: all 0.3s ease;
+    border: 3px solid #3498db;
+}
+
+.update-notification h3 {
+    color: #2c3e50;
+    margin-top: 0;
+    font-size: 1.8rem;
+    border-bottom: 2px solid #3498db;
+    padding-bottom: 10px;
+    margin-bottom: 20px;
+}
+
+#update-content ul {
+    text-align: left;
+    padding-left: 20px;
+    margin-bottom: 25px;
+    font-size: 1.1rem;
+    line-height: 1.6;
+}
+
+#update-content li {
+    margin-bottom: 10px;
+}
+
+#close-update {
+    padding: 12px 30px;
+    font-size: 1.2rem;
+    font-weight: bold;
+    margin-top: 10px;
+}
+
+/* Адаптивность */
+@media (max-width: 600px) {
+    .update-notification {
+        width: 90%;
+        padding: 20px 15px;
+    }
+    
+    .update-notification h3 {
+        font-size: 1.5rem;
+    }
+    
+    #update-content ul {
+        font-size: 1rem;
+    }
+}
+
+/* Стили для кнопки профиля */
+.btn-gray {
+    background-color: #ecf0f1;
+    color: #2c3e50;
+}
+
+.btn-gray:hover {
+    background-color: #d5dbdb;
+}
+
+.code-display {
+    font-size: 1.8rem;
+    letter-spacing: 3px;
+    font-weight: bold;
+    color: #2c3e50;
+    background: #f8f9fa;
+    padding: 10px 20px;
+    border-radius: 10px;
+    display: inline-block;
+}
+
+.small-text {
+    font-size: 0.9rem;
+    color: #7f8c8d;
+    margin-top: 5px;
+}
+
+.children-list {
+    margin-top: 20px;
+}
+
+.child-item {
+    padding: 10px;
+    border-bottom: 1px solid #eee;
+}
+
+.view-stats {
+    color: #3498db;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.view-stats:hover {
+    text-decoration: underline;
+}
+
+/* Кнопка выхода */
+.btn-red {
+    background-color: #e74c3c;
+}
+
+.btn-red:hover {
+    background-color: #c0392b;
+}
+
+/* Отступы для кнопок в блоке пользователя */
+.btn-container {
+    margin-top: 15px;
+}
+
+.avatar-selection {
+    display: flex;
+    justify-content: space-around;
+    margin: 15px 0;
+}
+
+.avatar-option {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    overflow: hidden;
+    cursor: pointer;
+    border: 2px solid #ddd;
+    transition: all 0.3s;
+}
+
+.avatar-option:hover {
+    transform: scale(1.05);
+    border-color: #3498db;
+}
+
+.avatar-option.selected {
+    border-color: #3498db;
+    transform: scale(1.1);
+    box-shadow: 0 0 10px rgba(52, 152, 219, 0.5);
+}
+
+.avatar-option img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.profile-avatar {
+    width: 10%;
+}
+
+.profile-header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 30px;
+    text-align: left;
+    gap: 20px;
+}
+
+.profile-avatar {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 3px solid #3498db;
+    flex-shrink: 0;
+}
+
+.profile-info {
+    flex-grow: 1;
+}
+
+.code-display {
+    font-size: 1.8rem;
+    letter-spacing: 3px;
+    font-weight: bold;
+    color: #2c3e50;
+    background: #f8f9fa;
+    padding: 10px 20px;
+    border-radius: 10px;
+    display: inline-block;
+}
+
+.small-text {
+    font-size: 0.9rem;
+    color: #7f8c8d;
+    margin-top: 5px;
+}
+
+.children-list {
+    margin-top: 20px;
+}
+
+.child-item {
+    display: flex;
+    align-items: center;
+    padding: 10px;
+    border-bottom: 1px solid #eee;
+}
+
+.child-avatar {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-right: 15px;
+}
+
+.view-stats {
+    color: #3498db;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.view-stats:hover {
+    text-decoration: underline;
+}
+
+.btn-gray {
+    background-color: #ecf0f1;
+    color: #2c3e50;
+}
+
+.btn-gray:hover {
+    background-color: #d5dbdb;
+}
+
+/* Кнопка выхода */
+.btn-red {
+    background-color: #e74c3c;
+}
+
+.btn-red:hover {
+    background-color: #c0392b;
+}
+
+/* Отступы для кнопок в блоке пользователя */
+.btn-container {
+    margin-top: 15px;
+}
+
+/* Адаптивность */
+@media (max-width: 600px) {
+    .profile-header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    
+    .profile-avatar {
+        margin-bottom: 15px;
+    }
+}
+
+@media (max-width: 600px) {
+    /* ... другие стили ... */
+    
+    #profile-avatar-small {
+        width: 25px;
+        height: 25px;
+    }
+}
+
+/* Добавим в основной раздел */
+#profile-avatar-small {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    margin-right: 10px;
+    object-fit: cover;
+    border: 2px solid #3498db;
+}
+
+#profile-avatar-small {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    margin-right: 10px;
+    object-fit: cover;
+    border: 2px solid #3498db;
+}
+
+/* Адаптация для мобильных */
+@media (max-width: 600px) {
+    #profile-avatar-small {
+        width: 25px;
+        height: 25px;
+    }
+}

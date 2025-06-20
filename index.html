@@ -7,13 +7,21 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div class="version-info">v1.2</div>
+    <div class="version-info">v1.3</div>
     <div class="changelog">
         <h4>Что нового:</h4>
         <ul>
-            <li>Подготовка к добавлению авторизации</li>
-            <li>Улучшена структура проекта</li>
+            <li>Добавлена система авторизации</li>
+            <li>Синхронизация статистики между устройствами</li>
+            <li>Личный кабинет пользователя</li>
+            <li>Статистика детей в аккаунте родителей</li>
         </ul>
+    </div>
+
+    <div id="update-notification" class="update-notification" style="display: none;">
+        <h3>Что нового в версии <span id="update-version"></span>?</h3>
+        <div id="update-content"></div>
+        <button id="close-update" class="btn btn-green">Понятно!</button>
     </div>
 
     <div class="container">
@@ -24,8 +32,17 @@
                 <button id="multiplication-btn" class="btn btn-big btn-green">Умножение</button>
                 <button id="division-btn" class="btn btn-big btn-orange">Деление</button>
             </div>
-            <button id="show-stats-btn" class="btn">Моя статистика</button>
             <button id="auth-btn" class="btn">Войти в аккаунт</button>
+
+            <!-- Кнопка профиля -->
+            <div id="profile-btn-container" style="margin-top: 20px; display: none;">
+                <button id="profile-btn" class="btn btn-gray">
+                    <div style="display: flex; align-items: center; justify-content: center;">
+                        <img id="profile-avatar-small" src="" alt="Аватар">
+                        <span id="profile-btn-text">Личный кабинет</span>
+                    </div>
+                </button>
+            </div>
         </div>
     </div>
 
@@ -35,5 +52,74 @@
     
     <script src="common.js"></script>
     <script src="main.js"></script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', async () => {
+        const authBtn = document.getElementById('auth-btn');
+        const profileContainer = document.getElementById('profile-btn-container');
+        const profileBtn = document.getElementById('profile-btn');
+        
+        // Проверка обновлений
+        const updateNotification = document.getElementById('update-notification');
+        const updateVersion = document.getElementById('update-version');
+        const updateContent = document.getElementById('update-content');
+        const closeUpdate = document.getElementById('close-update');
+        
+        const updates = checkForUpdates();
+        if (updates) {
+            updateVersion.textContent = APP_VERSION;
+            
+            let html = '<ul>';
+            updates.forEach(item => {
+                html += `<li>${item}</li>`;
+            });
+            html += '</ul>';
+            
+            updateContent.innerHTML = html;
+            updateNotification.style.display = 'block';
+            
+            // Анимация появления
+            setTimeout(() => {
+                updateNotification.style.opacity = '1';
+                updateNotification.style.transform = 'translate(-50%, -50%) scale(1)';
+            }, 100);
+        }
+        
+        // Закрытие уведомления
+        closeUpdate.addEventListener('click', () => {
+            updateNotification.style.opacity = '0';
+            updateNotification.style.transform = 'translate(-50%, -50%) scale(0.9)';
+            setTimeout(() => {
+                updateNotification.style.display = 'none';
+            }, 300);
+        });
+    
+        // Проверяем, вошел ли пользователь
+        if (state.currentUser) {
+            authBtn.style.display = 'none';
+            profileContainer.style.display = 'block';
+            
+            // Устанавливаем текст
+            document.getElementById('profile-btn-text').textContent = 
+                state.userData?.name || 'Личный кабинет';
+
+            // Устанавливаем аватарку
+            const avatarIndex = state.userData?.avatarIndex || 0;
+            const avatarUrl = AVATARS[avatarIndex];
+            document.getElementById('profile-avatar-small').src = avatarUrl;
+            
+            // Загружаем статистику пользователя
+            state.userStats = await loadStats();
+        } else {
+            authBtn.style.display = 'block';
+            profileContainer.style.display = 'none';
+        }
+
+        // Переход в личный кабинет
+        profileBtn?.addEventListener('click', () => {
+            window.location.href = 'profile.html';
+        });
+    });
+</script>
 </body>
 </html>

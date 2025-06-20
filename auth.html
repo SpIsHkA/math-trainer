@@ -11,12 +11,33 @@
         <div id="auth-screen" class="screen active">
             <h1>Вход в аккаунт</h1>
             
-            <div class="auth-form">
-                <input type="email" id="auth-email" class="auth-input" placeholder="Email">
+            <div class="auth-form" id="login-form">
+                <input type="text" id="auth-login" class="auth-input" placeholder="Логин (английские буквы)" pattern="[a-zA-Z0-9]+" required>
                 <input type="password" id="auth-password" class="auth-input" placeholder="Пароль">
                 <button id="login-btn" class="btn btn-green">Войти</button>
-                <button id="register-btn" class="btn">Регистрация</button>
+                <button id="show-register-btn" class="btn">Регистрация</button>
                 <button id="auth-back-btn" class="btn">Назад</button>
+            </div>
+            
+            <div class="auth-form" id="register-form" style="display: none;">
+                <input type="text" id="reg-login" class="auth-input" placeholder="Логин (английские буквы)" pattern="[a-zA-Z0-9]+" required>
+                <input type="text" id="reg-name" class="auth-input" placeholder="Ваше имя">
+                
+                <!-- Выбор аватарки -->
+                <div class="form-group">
+                    <label for="avatar-select">Аватарка:</label>
+                    <div class="avatar-selection" id="avatar-selection"></div>
+                    <input type="hidden" id="selected-avatar" value="0">
+                </div>
+                
+                <select id="reg-role" class="auth-input">
+                    <option value="child">Ребёнок</option>
+                    <option value="parent">Родитель</option>
+                </select>
+                <input type="password" id="reg-password" class="auth-input" placeholder="Пароль">
+                <input type="password" id="reg-confirm-password" class="auth-input" placeholder="Подтвердите пароль">
+                <button id="register-btn" class="btn btn-green">Зарегистрироваться</button>
+                <button id="show-login-btn" class="btn">Уже есть аккаунт</button>
             </div>
             
             <div id="auth-status" class="auth-status"></div>
@@ -29,5 +50,17 @@
     
     <script src="common.js"></script>
     <script src="auth.js"></script>
+    <script>
+        // Обработчики выбора аватарки
+        document.querySelectorAll('.avatar-option').forEach(option => {
+            option.addEventListener('click', function() {
+                document.querySelectorAll('.avatar-option').forEach(opt => {
+                    opt.classList.remove('selected');
+                });
+                this.classList.add('selected');
+                document.getElementById('selected-avatar').value = this.dataset.avatar;
+            });
+        });
+    </script>
 </body>
 </html>

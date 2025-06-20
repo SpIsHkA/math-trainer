@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Личный кабинет - Тренажёр умножения и деления</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <div id="profile-screen" class="screen active">
+            <div class="profile-header">
+                <img id="profile-avatar" src="" alt="Аватар" class="profile-avatar">
+                <div>
+                    <h1 id="profile-name"></h1>
+                    <p id="profile-role"></p>
+                </div>
+            </div>
+            
+            <!-- Для детей: отображаем код и статистику -->
+            <div id="child-code-section" class="stat-card" style="display: none;">
+                <h3>Ваш код для привязки</h3>
+                <p id="child-code" class="code-display">XXXX-XXXX</p>
+                <p class="small-text">Дайте этот код родителю, чтобы он мог привязать ваш аккаунт</p>
+                
+                <div class="stat-card">
+                    <h3>Ваша статистика</h3>
+                    <p>Всего решено: <span id="child-total-questions">0</span></p>
+                    <p>Правильно: <span id="child-total-correct">0</span></p>
+                    <p>Точность: <span id="child-accuracy">0%</span></p>
+                </div>
+            </div>
+            
+            <!-- Для родителей: форма добавления ребенка -->
+            <div id="parent-section" class="stat-card" style="display: none;">
+                <h3>Добавить ребенка</h3>
+                <div class="form-group">
+                    <input type="text" id="child-code-input" placeholder="Введите код ребенка">
+                    <button id="add-child-btn" class="btn btn-green">Добавить</button>
+                </div>
+                
+                <h3>Ваши дети</h3>
+                <div id="children-list" class="children-list"></div>
+            </div>
+            
+            <div class="btn-container">
+                <button id="back-btn" class="btn">На главную</button>
+                <button id="logout-btn" class="btn btn-red">Выйти</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+    
+    <script src="common.js"></script>
+    <script src="profile.js"></script>
+</body>
+</html>

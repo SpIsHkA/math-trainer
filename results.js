@@ -1,4 +1,6 @@
 document.addEventListener('DOMContentLoaded', () => {
+    // Использовать window.state вместо state
+    console.log(window.state);
     // Сохраняем состояние при выходе
     window.addEventListener('beforeunload', saveStateToStorage);
     

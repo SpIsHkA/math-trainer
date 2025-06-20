@@ -1,117 +1,187 @@
-// Общие константы
-const APP_VERSION = "1.2";
-const VERSION_KEY = "mathAppVersion";
-const LAST_UPDATE_KEY = "lastUpdateShown";
-const LOCAL_STATS_KEY = 'mathTrainerStats';
-
-// Чанглог
-const CHANGELOG = {
-    "1.2": [
-        "Подготовка к добавлению авторизации",
-        "Улучшена структура проекта"
-    ],
-    "1.1": [
-        "Добавлена полная статистика",
-        "История последних 10 попыток",
-        "Отображение точности ответов"
-    ],
-    "1.0": [
-        "Первая версия приложения",
-        "Режимы умножения и деления",
-        "Базовые функции тестирования"
-    ]
+// Firebase configuration
+const firebaseConfig = {
+  apiKey: "AIzaSyBHaPUscgqd-jEyjh6st5Un3Eg8ns3oLQU",
+  authDomain: "mathtrainer-f7898.firebaseapp.com",
+  projectId: "mathtrainer-f7898",
+  storageBucket: "mathtrainer-f7898.appspot.com",
+  messagingSenderId: "475439097301",
+  appId: "1:475439097301:web:af98ec3211527c7b55895c"
 };
 
-// Общее состояние
+const APP_VERSION = '1.3';
+
+// Initialize Firebase
+if (!firebase.apps.length) {
+  firebase.initializeApp(firebaseConfig);
+}
+
+// Firestore instance
+const db = firebase.firestore();
+
+// Application state
 const state = {
-    operation: null,
-    selectedNumbers: [1, 2, 3, 4, 5, 6, 7, 8, 9],
-    questionCount: 10,
-    questions: [],
-    currentQuestionIndex: 0,
-    correctAnswers: 0,
-    incorrectAnswers: 0,
-    currentUser: null
+  operation: null,
+  selectedNumbers: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+  questionCount: 10,
+  questions: [],
+  currentQuestionIndex: 0,
+  correctAnswers: 0,
+  incorrectAnswers: 0,
+  currentUser: null,
+  userData: null,
+  userStats: null
 };
 
-// Функции управления версиями
-function checkForUpdates() {
-    const lastVersion = localStorage.getItem(VERSION_KEY);
-    const lastUpdateShown = localStorage.getItem(LAST_UPDATE_KEY);
-    
-    if (lastVersion !== APP_VERSION) {
-        showUpdateNotification();
-        localStorage.setItem(VERSION_KEY, APP_VERSION);
-    } 
-    else if (lastUpdateShown !== APP_VERSION) {
-        showUpdateNotification();
-    }
-}
-
-function showUpdateNotification() {
-    const notification = document.createElement('div');
-    notification.className = 'update-notification';
-    notification.innerHTML = `
-        <h3>Обновление до v${APP_VERSION}</h3>
-        <p>Что нового в этой версии:</p>
-        <ul style="text-align: left; padding-left: 20px;">
-            ${CHANGELOG[APP_VERSION].map(item => `<li>${item}</li>`).join('')}
-        </ul>
-        <button id="close-update" class="btn" style="margin-top: 15px;">Закрыть</button>
-    `;
-    
-    document.body.appendChild(notification);
-    
-    document.getElementById('close-update').addEventListener('click', () => {
-        notification.remove();
-        localStorage.setItem(LAST_UPDATE_KEY, APP_VERSION);
-    });
-}
-
-// Функции работы с хранилищем
+// Storage functions
 function saveStateToStorage() {
-    sessionStorage.setItem('appState', JSON.stringify(state));
+  sessionStorage.setItem('appState', JSON.stringify(state));
 }
 
 function loadStateFromStorage() {
-    const savedState = sessionStorage.getItem('appState');
-    if (savedState) {
-        Object.assign(state, JSON.parse(savedState));
+  const savedState = sessionStorage.getItem('appState');
+  if (savedState) {
+    Object.assign(state, JSON.parse(savedState));
+  }
+}
+
+// Загружаем состояние при запуске
+loadStateFromStorage();
+
+// Функции для работы с пользователем
+function saveUserData(user) {
+  state.currentUser = user;
+  state.userData = user;
+  localStorage.setItem('currentUser', JSON.stringify(user));
+}
+
+function loadUserData() {
+  const user = localStorage.getItem('currentUser');
+  if (user) {
+    const parsedUser = JSON.parse(user);
+    state.currentUser = parsedUser;
+    state.userData = parsedUser;
+  }
+}
+
+// Загружаем данные пользователя при запуске
+loadUserData();
+
+// Статистика: загрузка с сервера
+async function loadStats(userId = null) {
+  const uid = userId || (state.currentUser ? state.currentUser.uid : null);
+  
+  if (!uid) {
+    return {
+      totalQuestions: 0,
+      totalCorrect: 0,
+      attempts: []
+    };
+  }
+  
+  try {
+    const doc = await db.collection('userStats').doc(uid).get();
+    if (doc.exists) {
+      return doc.data();
     }
+  } catch (error) {
+    console.error('Ошибка загрузки статистики:', error);
+  }
+  
+  return {
+    totalQuestions: 0,
+    totalCorrect: 0,
+    attempts: []
+  };
 }
 
-function saveResults() {
-    const localStats = JSON.parse(localStorage.getItem(LOCAL_STATS_KEY)) || {
-        totalQuestions: 0,
-        totalCorrect: 0,
-        attempts: []
-    };
-    
-    localStats.totalQuestions += state.questions.length;
-    localStats.totalCorrect += state.correctAnswers;
-    
-    const attempt = {
-        date: new Date().toLocaleString(),
-        correct: state.correctAnswers,
-        total: state.questions.length,
-        operation: state.operation
-    };
-    
-    localStats.attempts.push(attempt);
-    localStats.attempts = localStats.attempts.slice(-10);
-    localStorage.setItem(LOCAL_STATS_KEY, JSON.stringify(localStats));
+// Статистика: сохранение на сервере
+async function saveStats(userId = null) {
+  const uid = userId || (state.currentUser ? state.currentUser.uid : null);
+  if (!uid || !state.userStats) return;
+  
+  try {
+    await db.collection('userStats').doc(uid).set(state.userStats);
+    console.log('Статистика сохранена на сервере');
+  } catch (error) {
+    console.error('Ошибка сохранения статистики:', error);
+  }
 }
 
-function loadStats() {
-    return JSON.parse(localStorage.getItem(LOCAL_STATS_KEY)) || {
-        totalQuestions: 0,
-        totalCorrect: 0,
-        attempts: []
-    };
+// Сохранение результатов тренировки
+async function saveResults() {
+  // Обновляем статистику
+  state.userStats = await loadStats();
+  
+  state.userStats.totalQuestions += state.questions.length;
+  state.userStats.totalCorrect += state.correctAnswers;
+  
+  const attempt = {
+    date: new Date().toISOString(),
+    correct: state.correctAnswers,
+    total: state.questions.length,
+    operation: state.operation
+  };
+  
+  state.userStats.attempts.push(attempt);
+  state.userStats.attempts = state.userStats.attempts.slice(-10);
+  
+  // Сохраняем на сервере
+  await saveStats();
 }
 
-// Инициализация приложения
-document.addEventListener('DOMContentLoaded', () => {
-    loadStateFromStorage();
-    checkForUpdates();
-});
+// Update notification functions
+function checkForUpdates() {
+  const lastSeenVersion = localStorage.getItem('lastSeenVersion');
+  
+  if (lastSeenVersion !== APP_VERSION) {
+    localStorage.setItem('lastSeenVersion', APP_VERSION);
+    return getUpdateInfo();
+  }
+  
+  return null;
+}
+
+// Генерация уникального кода для ребенка
+function generateChildCode() {
+    const characters = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+    let code = '';
+    for (let i = 0; i < 8; i++) {
+        if (i > 0 && i % 4 === 0) code += '-';
+        code += characters.charAt(Math.floor(Math.random() * characters.length));
+    }
+    return code;
+}
+
+function getUpdateInfo() {
+  const updates = {
+    '1.3': [
+      'Добавлена система авторизации',
+      'Синхронизация статистики между устройствами',
+      'Личный кабинет пользователя',
+      'Статистика детей в аккаунте родителей'
+    ]
+  };
+  
+  return updates[APP_VERSION] || null;
+}
+
+const AVATARS = [
+    "./avatars/bear.jpeg", // медведь
+    "./avatars/duck.jpeg",   // утка
+    "./avatars/hedgehog.jpeg", // ежик
+    "./avatars/horse.jpeg"  // лошадь
+];
+
+// Make variables globally available
+window.state = state;
+window.firebase = firebase;
+window.db = db;
+window.saveStateToStorage = saveStateToStorage;
+window.saveResults = saveResults;
+window.loadStats = loadStats;
+window.saveStats = saveStats;
+window.APP_VERSION = APP_VERSION;
+window.checkForUpdates = checkForUpdates;
+window.getUpdateInfo = getUpdateInfo;
+window.generateChildCode = generateChildCode;
+window.AVATARS = AVATARS;
