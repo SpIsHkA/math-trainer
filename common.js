@@ -34,11 +34,11 @@ const state = {
 
 // Storage functions
 function saveStateToStorage() {
-  sessionStorage.setItem('appState', JSON.stringify(state));
+  localStorage.setItem('appState', JSON.stringify(state));
 }
 
 function loadStateFromStorage() {
-  const savedState = sessionStorage.getItem('appState');
+  const savedState = localStorage.getItem('appState');
   if (savedState) {
     Object.assign(state, JSON.parse(savedState));
   }

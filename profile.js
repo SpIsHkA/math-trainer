@@ -4,7 +4,15 @@ document.addEventListener('DOMContentLoaded', async () => {
         alert("Пожалуйста, войдите в систему");
         window.location.href = 'index.html';
         return;
+    }try {
+    const userDoc = await db.collection('users').doc(state.currentUser.uid).get();
+    if (userDoc.exists) {
+      state.userData = userDoc.data();
+      saveStateToStorage(); // Сохраняем свежие данные
     }
+  } catch (error) {
+    console.error("Ошибка загрузки данных:", error);
+  }
     
     // Элементы страницы
     const profileAvatar = document.getElementById('profile-avatar');
@@ -51,7 +59,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             
             // Очищаем хранилище
             localStorage.removeItem('currentUser');
-            sessionStorage.removeItem('appState');
+            localStorage.removeItem('appState');
             
             // Переходим на главную
             window.location.href = 'index.html';
